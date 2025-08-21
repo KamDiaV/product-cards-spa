@@ -1,0 +1,15 @@
+:root { color-scheme: light; font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif; }
+body { margin: 0; background: #fafafa; color: #111; }
+.container { max-width: 1120px; margin: 0 auto; padding: 16px; }
+
+.nav { display: flex; gap: 12px; padding: 12px 0; }
+.nav a { text-decoration: none; color: #111; padding: 6px 10px; border-radius: 8px; }
+.nav a:hover { background: #eee; }
+
+.toolbar { display: flex; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
