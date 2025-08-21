@@ -2,12 +2,15 @@
   "name": "product-cards-spa",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://KamDiaV.github.io/product-cards-spa",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
@@ -31,7 +34,7 @@
     "eslint-plugin-react-refresh": "^0.4.20",
     "gh-pages": "^6.3.0",
     "globals": "^16.3.0",
-    "typescript": "~5.8.3",
+    "typescript": "^5.5.4",
     "typescript-eslint": "^8.39.1",
     "vite": "^7.1.2",
     "vite-plugin-svgr": "^4.3.0"
