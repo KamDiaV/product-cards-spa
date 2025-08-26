@@ -1,9 +1,9 @@
-import { useState } from 'react'
-import { useParams, Link, useSearchParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useParams, Link, useSearchParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import type { RootState } from '../store'
+import type { AppDispatch, RootState } from '../store'
 import ProductForm from '../ui/ProductForm'
-import { updateProduct } from '../store/productsSlice'
+import { updateProduct, fetchProducts } from '../store/productsSlice'
 import type { ProductFormValues } from '../validation/productSchema'
 import Toast from '../ui/Toast'
 import './ProductDetailsPage.css'
@@ -13,12 +13,37 @@ export default function ProductDetailsPage() {
   const [sp] = useSearchParams()
   const isEdit = sp.get('edit') === '1'
 
-  const dispatch = useDispatch()
-  const product = useSelector((s: RootState) =>
-    s.products.items.find(p => String(p.id) === String(id)),
-  )
+  const dispatch = useDispatch<AppDispatch>()
+  const navigate = useNavigate()
+
+  const { items, status, error } = useSelector((s: RootState) => s.products)
+  const product = items.find(p => String(p.id) === String(id))
 
   const [showToast, setShowToast] = useState(false)
+
+  useEffect(() => {
+    if (status === 'idle') {
+      dispatch(fetchProducts())
+    }
+  }, [status, dispatch])
+
+  if (status === 'idle' || status === 'loading') {
+    return (
+      <div className="product-loading">
+        <p>Loading…</p>
+        <Link to="/products" className="link-btn">← Back to list</Link>
+      </div>
+    )
+  }
+
+  if (status === 'failed') {
+    return (
+      <div className="product-error">
+        <p>Failed to load products{error ? `: ${error}` : ''}.</p>
+        <Link to="/products" className="link-btn">← Back to list</Link>
+      </div>
+    )
+  }
 
   if (!product) {
     return (
@@ -27,7 +52,6 @@ export default function ProductDetailsPage() {
           <p>Product not found.</p>
           <Link to="/products" className="link-btn">← Back to list</Link>
         </div>
-
         {showToast && (
           <Toast message="Changes saved!" onClose={() => setShowToast(false)} />
         )}
@@ -46,7 +70,7 @@ export default function ProductDetailsPage() {
     const onSubmit = (data: ProductFormValues) => {
       dispatch(updateProduct({ ...product, ...data }))
       setShowToast(true)
-      window.history.replaceState(null, '', `/products/${product.id}`)
+      navigate(`/products/${product.id}`, { replace: true })
     }
 
     return (
@@ -82,7 +106,7 @@ export default function ProductDetailsPage() {
           <strong className="product__price">${product.price.toFixed(2)}</strong>
           <p className="product__desc">{product.description}</p>
 
-          <div className="product__actions">
+        <div className="product__actions">
             <Link to="/products" className="link-btn">← Back to list</Link>
             <Link to={`/products/${product.id}?edit=1`} className="link-btn">
               Edit
