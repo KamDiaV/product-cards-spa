@@ -14,6 +14,11 @@ node_modules
 dist
 dist-ssr
 
+# Vite / Rollup cache
+.vite
+vite.config.ts.timestamp-*
+vite.config.ts.rollup-*
+
 # Env files
 .env
 .env.*.local
@@ -29,6 +34,9 @@ dist-ssr
 *.sln
 *.sw?
 
+# TypeScript build info (tsc --build cache)
+*.tsbuildinfo
+
 # Test coverage
 coverage
 *.lcov
@@ -41,6 +49,19 @@ cypress/videos
 cypress/screenshots
 .playwright
 
-# Misc
+# Jest cache
+.jest
+
+# Vitest cache
+.vitest
+
+# Misc caches
 *.tmp
 *.temp
+.eslintcache
+.turbo
+.parcel-cache
+
+# Mac / Linux system files
+*.DS_Store
+Thumbs.db
