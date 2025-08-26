@@ -20,6 +20,15 @@ export default function ProductCard({ product }: { product: Product }) {
   const like = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
     dispatch(toggleLike(product.id))
+
+    const btn = e.currentTarget        
+    btn.classList.remove('pulse')      
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      requestAnimationFrame(() => {
+        btn.classList.add('pulse')
+        setTimeout(() => btn.classList.remove('pulse'), 300) 
+      })
+    }
   }
 
   const remove = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -28,8 +37,8 @@ export default function ProductCard({ product }: { product: Product }) {
   }
 
   const edit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation()                 
-    nav(`/products/${product.id}?edit=1`) 
+    e.stopPropagation()
+    nav(`/products/${product.id}?edit=1`)
   }
 
   return (
@@ -56,14 +65,14 @@ export default function ProductCard({ product }: { product: Product }) {
 
         <div>
           <button
-    type="button"
-    onClick={edit}
-    className="icon"
-    aria-label="Edit product"
-    title="Edit"
-  >
-    <EditIcon aria-hidden />   
-  </button>
+            type="button"
+            onClick={edit}
+            className="icon"
+            aria-label="Edit product"
+            title="Edit"
+          >
+            <EditIcon aria-hidden />
+          </button>
 
           <button
             type="button"
