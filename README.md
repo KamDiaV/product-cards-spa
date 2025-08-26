@@ -1,4 +1,4 @@
-# Product Cards SPA — тестовое задание для «Альфы»
+# Product Cards SPA
 
 **Live (GitHub Pages):** [https://KamDiaV.github.io/product-cards-spa](https://KamDiaV.github.io/product-cards-spa)
 
