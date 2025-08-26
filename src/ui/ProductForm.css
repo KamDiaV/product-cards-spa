@@ -16,7 +16,12 @@
   font-weight: 700;
 }
 
-.form__group { display: grid; gap: 6px; }
+.form__group {
+  display: grid;
+  gap: 6px;
+  align-items: start;    
+  align-self: start;     
+}
 
 .form__label {
   font-size: 14px;
