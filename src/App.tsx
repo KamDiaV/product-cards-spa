@@ -1,25 +1,26 @@
-import { Routes, Route, Navigate, Link } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import ProductsPage from './pages/ProductsPage'
-import ProductDetailsPage from './pages/ProductDetailsPage'
 import CreateProductPage from './pages/CreateProductPage'
+import ProductDetailsPage from './pages/ProductDetailsPage'
+import Header from './ui/Header'
+import Footer from './ui/Footer'
+import './App.css'
 
 export default function App() {
   return (
     <div className="app">
-      <header className="container">
-        <nav className="nav">
-          <Link to="/products">Products</Link>
-          <Link to="/create-product">Create</Link>
-        </nav>
-      </header>
-      <main className="container">
+      <Header />
+
+      <main className="main">
         <Routes>
           <Route path="/" element={<Navigate to="/products" replace />} />
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/products/:id" element={<ProductDetailsPage />} />
-          <Route path="/create-product" element={<CreateProductPage />} />
+          <Route path="/create" element={<CreateProductPage />} />
         </Routes>
       </main>
+
+      <Footer />
     </div>
   )
 }
