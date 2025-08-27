@@ -4,6 +4,8 @@ export type Product = {
   description: string
   image: string
   price: number
-  liked?: boolean
+  liked: boolean
   createdByUser?: boolean 
 }
+
+export type ProductFilter = 'all' | 'favorites'
