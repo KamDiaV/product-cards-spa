@@ -1,7 +1,7 @@
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { fetchProductById } from '../store/productsSlice'
+import { fetchProductById, fetchProducts } from '../store/productsSlice'
 import './ProductDetailsPage.css'
 
 export default function ProductDetailsPage() {
@@ -10,17 +10,38 @@ export default function ProductDetailsPage() {
   const dispatch = useAppDispatch()
   const { items, status, error } = useAppSelector(s => s.products)
   const product = items.find(p => String(p.id) === String(id))
+  const requestedIdRef = useRef<number | null>(null)
+  const numericId = id ? Number(id) : NaN
+  const [isFetchingById, setIsFetchingById] = useState(false)
+  const [notFound, setNotFound] = useState(false)
 
   useEffect(() => {
-    if (status === 'idle' && id) {
-      const numericId = Number(id)
-      if (!Number.isNaN(numericId)) {
-        dispatch(fetchProductById(numericId))
-      }
+    if (!Number.isNaN(numericId) && !product && requestedIdRef.current !== numericId) {
+      requestedIdRef.current = numericId
+      setIsFetchingById(true)
+      setNotFound(false)
+      dispatch(fetchProductById(numericId))
+        .unwrap()
+        .then(() => {
+          setNotFound(false)
+        })
+        .catch(() => {
+          setNotFound(true)
+        })
+        .finally(() => {
+          if (requestedIdRef.current === numericId) requestedIdRef.current = null
+          setIsFetchingById(false)
+        })
     }
-  }, [status, id, dispatch])
+    if (status === 'idle') {
+      dispatch(fetchProducts())
+    }
+    if (product && requestedIdRef.current === numericId) {
+      requestedIdRef.current = null
+    }
+  }, [numericId, product, status, dispatch])
 
-  if (status === 'idle' || status === 'loading') {
+  if (!product && (isFetchingById || status === 'idle' || status === 'loading')) {
     return (
       <div className="product-loading">
         <p>Loading…</p>
@@ -38,13 +59,17 @@ export default function ProductDetailsPage() {
     )
   }
 
-  if (!product) {
+  if (!product && notFound) {
     return (
       <div className="product-not-found">
         <p>Product not found.</p>
         <Link to="/products" className="link-btn">Back to products</Link>
       </div>
     )
+  }
+
+  if (!product) {
+    return null
   }
 
   return (

@@ -108,3 +108,13 @@
   text-align: center;
   gap: 16px;               
 }
+
+.product-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  text-align: center;
+  gap: 16px;
+}

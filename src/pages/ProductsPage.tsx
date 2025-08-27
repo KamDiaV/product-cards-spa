@@ -25,7 +25,7 @@ export default function ProductsPage() {
   const paged = useAppSelector(selectPagedProducts)
 
   useEffect(() => {
-    if (status === 'idle') dispatch(fetchProducts())
+    if (status === 'idle' || status === 'failed') dispatch(fetchProducts())
   }, [status, dispatch])
 
   useEffect(() => {
@@ -35,7 +35,14 @@ export default function ProductsPage() {
   }, [debouncedSearch, search, dispatch])
 
   if (status === 'loading') return <p>Loading…</p>
-  if (status === 'failed') return <p>Failed to load</p>
+  if (status === 'failed') return (
+    <div className="empty-state">
+      <p>Failed to load. Please try again.</p>
+      <button type="button" className="link-btn" onClick={() => dispatch(fetchProducts())}>
+        Retry
+      </button>
+    </div>
+  )
 
   return (
     <section>
