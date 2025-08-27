@@ -1,4 +1,14 @@
-:root { color-scheme: light; font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif; }
+:root { color-scheme: light; font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif; 
+  --color-primary: #111;
+  --color-on-primary: #fff;
+  --color-text: #111;
+  --color-text-muted: #666;
+  --color-input-bg: #fff;
+  --color-tabs-bg: #fff;
+  --color-tab-bg: #fff;
+  --color-tab-text: #111;
+  --color-border: #eee;
+}
 body { margin: 0; background: #fafafa; color: #111; }
 .container { max-width: 1120px; margin: 0 auto; padding: 16px; }
 
