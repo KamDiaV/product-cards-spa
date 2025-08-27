@@ -1,6 +1,4 @@
-import { useEffect, useMemo } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import type { RootState, AppDispatch } from '../store'
+import { useEffect } from 'react'
 import {
   fetchProducts,
   setFilter,
@@ -11,30 +9,23 @@ import ProductCard from '../ui/ProductCard'
 import SearchInput from '../ui/SearchInput'
 import Tabs from '../ui/Tabs'
 import Pagination from '../ui/Pagination'
+import type { ProductFilter } from '../types'
+import { useAppDispatch, useAppSelector } from '../store/hooks'
+import { selectPagedProducts, selectPagination, selectFilter, selectSearch, selectProductsState } from '../store/productsSelectors'
 
 export default function ProductsPage() {
-  const dispatch = useDispatch<AppDispatch>()
-  const { items, status, filter, search, page, pageSize } = useSelector(
-    (s: RootState) => s.products,
-  )
+  const dispatch = useAppDispatch()
+  const { status } = useAppSelector(selectProductsState)
+  const filter = useAppSelector(selectFilter)
+  const search = useAppSelector(selectSearch)
+  const { page, pages } = useAppSelector(selectPagination)
+  const paged = useAppSelector(selectPagedProducts)
 
   useEffect(() => {
     if (status === 'idle') dispatch(fetchProducts())
   }, [status, dispatch])
 
-  const filtered = useMemo(() => {
-    const byFav = filter === 'favorites' ? items.filter(i => i.liked) : items
-    const bySearch = search
-      ? byFav.filter(i =>
-          (i.title + ' ' + i.description).toLowerCase().includes(search.toLowerCase()),
-        )
-      : byFav
-    return bySearch
-  }, [items, filter, search])
-
-  const pages = Math.max(1, Math.ceil(filtered.length / pageSize))
-  const start = (page - 1) * pageSize
-  const paged = filtered.slice(start, start + pageSize)
+  
 
   if (status === 'loading') return <p>Loading…</p>
   if (status === 'failed') return <p>Failed to load</p>
@@ -44,7 +35,7 @@ export default function ProductsPage() {
       <div className="toolbar">
         <Tabs
           value={filter}
-          onChange={(v) => dispatch(setFilter(v as 'all' | 'favorites'))}
+          onChange={(v: ProductFilter) => dispatch(setFilter(v))}
           options={[
             { value: 'all', label: 'All' },
             { value: 'favorites', label: 'Favorites' },
