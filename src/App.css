@@ -19,3 +19,13 @@ body {
   margin-inline: auto;
   padding-block: 32px; 
 }
+
+.empty-state {
+  display: flex;
+  flex-direction: column; 
+  align-items: center;    
+  justify-content: center;
+  min-height: 300px;      
+  text-align: center;
+  gap: 16px;              
+}

@@ -55,11 +55,20 @@ export default function ProductsPage() {
         />
       </div>
 
-      <div className="grid">
-        {paged.map(p => (
-          <ProductCard key={p.id} product={p} />
-        ))}
-      </div>
+      {paged.length === 0 ? (
+        <div className="empty-state">
+          <p>No products found. Try changing filters or search query.</p>
+          <button type="button" className="link-btn" onClick={() => { setLocalSearch(''); dispatch(setFilter('all')); dispatch(setSearch('')) }}>
+            Reset filters
+          </button>
+        </div>
+      ) : (
+        <div className="grid">
+          {paged.map(p => (
+            <ProductCard key={p.id} product={p} />
+          ))}
+        </div>
+      )}
 
       <Pagination
         page={page}
