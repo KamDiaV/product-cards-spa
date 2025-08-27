@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { fetchProducts } from '../store/productsSlice'
+import { fetchProductById } from '../store/productsSlice'
 import './ProductDetailsPage.css'
 
 export default function ProductDetailsPage() {
@@ -12,10 +12,13 @@ export default function ProductDetailsPage() {
   const product = items.find(p => String(p.id) === String(id))
 
   useEffect(() => {
-    if (status === 'idle') {
-      dispatch(fetchProducts())
+    if (status === 'idle' && id) {
+      const numericId = Number(id)
+      if (!Number.isNaN(numericId)) {
+        dispatch(fetchProductById(numericId))
+      }
     }
-  }, [status, dispatch])
+  }, [status, id, dispatch])
 
   if (status === 'idle' || status === 'loading') {
     return (

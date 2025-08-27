@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { getProducts } from '../api'
+import { getProducts, getProductById } from '../api'
 import type { Product, ProductFilter } from '../types'
 
 type ProductsState = {
@@ -30,6 +30,19 @@ export const fetchProducts = createAsyncThunk(
       return products
     } catch (e: unknown) {
       const errorMessage = e instanceof Error ? e.message : 'Failed to load'
+      return rejectWithValue(errorMessage)
+    }
+  },
+)
+
+export const fetchProductById = createAsyncThunk(
+  'products/fetchById',
+  async (id: number, { rejectWithValue }) => {
+    try {
+      const product = await getProductById(id)
+      return product
+    } catch (e: unknown) {
+      const errorMessage = e instanceof Error ? e.message : 'Failed to load product'
       return rejectWithValue(errorMessage)
     }
   },
@@ -81,6 +94,19 @@ const productsSlice = createSlice({
         state.items = action.payload
       })
       .addCase(fetchProducts.rejected, (state, action) => {
+        state.status = 'failed'
+        state.error = String(action.payload ?? 'Unknown error')
+      })
+      .addCase(fetchProductById.pending, state => {
+        state.status = 'loading'
+      })
+      .addCase(fetchProductById.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        const idx = state.items.findIndex(p => p.id === action.payload.id)
+        if (idx >= 0) state.items[idx] = { ...state.items[idx], ...action.payload }
+        else state.items.push(action.payload)
+      })
+      .addCase(fetchProductById.rejected, (state, action) => {
         state.status = 'failed'
         state.error = String(action.payload ?? 'Unknown error')
       })
