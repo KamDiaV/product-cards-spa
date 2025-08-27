@@ -1,6 +1,6 @@
 import type React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useAppDispatch } from '../store/hooks'
 import { toggleLike, deleteProduct } from '../store/productsSlice'
 import type { Product } from '../types'
 
@@ -12,7 +12,7 @@ import './ProductCard.css'
 
 export default function ProductCard({ product }: { product: Product }) {
   const nav = useNavigate()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const liked = product.liked
   const open = () => nav(`/products/${product.id}`)

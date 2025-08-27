@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link, useSearchParams, useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import type { AppDispatch, RootState } from '../store'
+import { useAppDispatch, useAppSelector } from '../store/hooks'
 import ProductForm from '../ui/ProductForm'
 import { updateProduct, fetchProducts } from '../store/productsSlice'
 import type { ProductFormValues } from '../validation/productSchema'
@@ -13,9 +12,9 @@ export default function ProductDetailsPage() {
   const [sp] = useSearchParams()
   const isEdit = sp.get('edit') === '1'
 
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const { items, status, error } = useSelector((s: RootState) => s.products)
+  const { items, status, error } = useAppSelector(s => s.products)
   const product = items.find(p => String(p.id) === String(id))
   const [showToast, setShowToast] = useState(false)
 
