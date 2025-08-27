@@ -4,11 +4,6 @@ import type { Product, ProductFilter } from '../types'
 
 export const selectProductsState = (state: RootState) => state.products
 
-export const selectAllProducts = createSelector(
-  [selectProductsState],
-  (productsState): Product[] => productsState.items,
-)
-
 export const selectFilter = createSelector(
   [selectProductsState],
   (productsState): ProductFilter => productsState.filter,
@@ -30,8 +25,9 @@ export const selectPageSize = createSelector(
 )
 
 export const selectFilteredProducts = createSelector(
-  [selectAllProducts, selectFilter, selectSearch],
-  (items, filter, search): Product[] => {
+  [selectProductsState, selectFilter, selectSearch],
+  (productsState, filter, search): Product[] => {
+    const items = productsState.items
     const trimmedQuery = search.trim().toLowerCase()
     let base = items
     if (filter === 'favorites') base = items.filter(p => p.liked)
