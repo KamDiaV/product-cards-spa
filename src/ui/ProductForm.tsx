@@ -1,17 +1,23 @@
 import { useForm, type SubmitHandler, type Resolver } from 'react-hook-form'
+
 import { zodResolver } from '@hookform/resolvers/zod'
+
 import { productSchema, type ProductFormValues } from '../validation/productSchema'
 import './ProductForm.css'
+
+type ProductFormProps = {
+  defaultValues: ProductFormValues
+  onSubmit: (data: ProductFormValues) => void
+  submitLabel?: string
+  title?: string
+}
 
 export default function ProductForm({
   defaultValues,
   onSubmit,
   submitLabel = 'Save',
-}: {
-  defaultValues: ProductFormValues
-  onSubmit: (data: ProductFormValues) => void
-  submitLabel?: string
-}) {
+  title,
+}: ProductFormProps) {
   const resolver: Resolver<ProductFormValues> = zodResolver(productSchema)
 
   const {
@@ -29,7 +35,7 @@ export default function ProductForm({
 
   return (
     <form className="form" onSubmit={handleSubmit(submit)} noValidate>
-      <h2 className="form__title">{submitLabel} product</h2>
+      <h2 className="form__title">{title ?? `${submitLabel} product`}</h2>
 
       <div className="form__group">
         <label className="form__label" htmlFor="title">Title</label>
