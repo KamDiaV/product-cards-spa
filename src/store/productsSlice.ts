@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { api } from '../api'
-import type { Product } from '../types'
+import type { Product, ProductFilter } from '../types'
 
 type ProductsState = {
   items: Product[]
   status: 'idle' | 'loading' | 'succeeded' | 'failed'
   error?: string
-  filter: 'all' | 'favorites'
+  filter: ProductFilter
   search: string
   page: number
   pageSize: number
@@ -22,12 +22,21 @@ const initialState: ProductsState = {
   pageSize: 12,
 }
 
+type ProductsApiItem = {
+  id: number
+  title: string
+  description: string
+  thumbnail: string
+  price: number
+}
+type ProductsApiResponse = { products: ProductsApiItem[] }
+
 export const fetchProducts = createAsyncThunk(
   'products/fetch',
   async (_, { rejectWithValue }) => {
     try {
-      const { data } = await api.get('/products?limit=100')
-      const normalized: Product[] = data.products.map((p: any) => ({
+      const { data } = await api.get<ProductsApiResponse>('/products?limit=100')
+      const normalized: Product[] = data.products.map((p: ProductsApiItem) => ({
         id: p.id,
         title: p.title,
         description: p.description,
@@ -36,8 +45,9 @@ export const fetchProducts = createAsyncThunk(
         liked: false,
       }))
       return normalized
-    } catch (e: any) {
-      return rejectWithValue(e.message ?? 'Failed to load')
+    } catch (e: unknown) {
+      const errorMessage = e instanceof Error ? e.message : 'Failed to load'
+      return rejectWithValue(errorMessage)
     }
   },
 )
@@ -53,7 +63,7 @@ const productsSlice = createSlice({
     deleteProduct(state, action: PayloadAction<number>) {
       state.items = state.items.filter(x => x.id !== action.payload)
     },
-    createProduct(state, action: PayloadAction<Omit<Product, 'id'>>) {
+    createProduct(state, action: PayloadAction<Omit<Product, 'id' | 'liked'>>) {
       const maxId = state.items.reduce((m, p) => Math.max(m, p.id), 0)
       state.items.unshift({
         ...action.payload,
