@@ -1,13 +1,13 @@
 .form {
-  max-width: 540px;            
-  margin: 24px auto;           
+  max-width: 540px;
+  margin: 24px auto;
   padding: 20px;
   background: #fff;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0,0,0,.04);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .04);
   display: grid;
-  gap: 14px;                 
+  gap: 14px;
 }
 
 .form__title {
@@ -19,8 +19,8 @@
 .form__group {
   display: grid;
   gap: 6px;
-  align-items: start;    
-  align-self: start;     
+  align-items: start;
+  align-self: start;
 }
 
 .form__label {
@@ -39,16 +39,27 @@
   transition: border-color .15s ease, box-shadow .15s ease;
 }
 
-.form__control::placeholder { color: #9ca3af; }
+.form__control::placeholder {
+  color: #9ca3af;
+}
 
 .form__control:focus {
   outline: none;
-  border-color: #ef4444;                   
+  border-color: #ef4444;
   box-shadow: 0 0 0 4px rgba(239, 68, 68, .12);
 }
 
-.form__row { display: grid; grid-template-columns: 1fr 160px; gap: 12px; }
-@media (max-width: 520px) { .form__row { grid-template-columns: 1fr; } }
+.form__row {
+  display: grid;
+  grid-template-columns: 1fr 160px;
+  gap: 12px;
+}
+
+@media (max-width: 520px) {
+  .form__row {
+    grid-template-columns: 1fr;
+  }
+}
 
 .form__hint {
   font-size: 12px;
@@ -62,6 +73,11 @@
   margin-top: 6px;
 }
 
+.form__footer {
+  text-align: center;
+  margin-top: 12px;
+}
+
 .btn {
   appearance: none;
   border: 1px solid #e5e7eb;
@@ -73,15 +89,25 @@
   transition: background .15s ease, border-color .15s ease, color .15s ease, transform .05s ease;
 }
 
-.btn:hover { background: #f3f4f6; border-color: #d1d5db; }
-.btn:active { transform: translateY(1px); }
+.btn:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
 
 .btn--primary {
-  background: #ef4444;           
+  background: #ef4444;
   border-color: #ef4444;
   color: #fff;
 }
-.btn--primary:hover { background: #dc2626; border-color: #dc2626; }
+
+.btn--primary:hover {
+  background: #dc2626;
+  border-color: #dc2626;
+}
 
 .form__error {
   color: #b91c1c;
@@ -104,16 +130,4 @@
 .link-btn:hover {
   background: #f3f4f6;
   border-color: #d1d5db;
-}
-
-.edit-section {
-  display: grid;
-  gap: 16px;
-  justify-items: center;   
-}
-
-.cancel-btn {
-  justify-self: center;
-  display: inline-flex;
-  width: auto;
 }
