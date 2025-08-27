@@ -20,5 +20,14 @@ export default function CreateProductPage() {
     nav('/products')
   }
 
-  return <ProductForm defaultValues={defaults} onSubmit={onSubmit} submitLabel="Create" />
+  return (
+    <>
+      <ProductForm defaultValues={defaults} onSubmit={onSubmit} submitLabel="Create" />
+      <div className="form__footer">
+        <button type="button" className="link-btn" onClick={() => nav('/products')}>
+          Back to products
+        </button>
+      </div>
+    </>
+  )
 }
