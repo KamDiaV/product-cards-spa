@@ -2,7 +2,7 @@ import axios from 'axios'
 import { z } from 'zod'
 import type { Product } from './types'
 
-export const api = axios.create({
+const api = axios.create({
   baseURL: 'https://dummyjson.com',
 })
 
