@@ -1,11 +1,11 @@
-import { useDispatch } from 'react-redux'
+import { useAppDispatch } from '../store/hooks'
 import { useNavigate } from 'react-router-dom'
 import { createProduct } from '../store/productsSlice'
 import ProductForm from '../ui/ProductForm'
 import type { ProductFormValues } from '../validation/productSchema'
 
 export default function CreateProductPage() {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const nav = useNavigate()
 
   const defaults: ProductFormValues = {
