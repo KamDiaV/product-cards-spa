@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { fetchProducts } from '../store/productsSlice'
-import Toast from '../ui/Toast'
 import './ProductDetailsPage.css'
 
 export default function ProductDetailsPage() {
@@ -11,7 +10,6 @@ export default function ProductDetailsPage() {
   const dispatch = useAppDispatch()
   const { items, status, error } = useAppSelector(s => s.products)
   const product = items.find(p => String(p.id) === String(id))
-  const [showToast, setShowToast] = useState(false)
 
   useEffect(() => {
     if (status === 'idle') {
@@ -39,15 +37,10 @@ export default function ProductDetailsPage() {
 
   if (!product) {
     return (
-      <>
-        <div className="product-not-found">
-          <p>Product not found.</p>
-          <Link to="/products" className="link-btn">Back to products</Link>
-        </div>
-        {showToast && (
-          <Toast message="Changes saved!" onClose={() => setShowToast(false)} />
-        )}
-      </>
+      <div className="product-not-found">
+        <p>Product not found.</p>
+        <Link to="/products" className="link-btn">Back to products</Link>
+      </div>
     )
   }
 
@@ -76,12 +69,6 @@ export default function ProductDetailsPage() {
           </div>
         </div>
       </section>
-      {showToast && (
-        <Toast
-          message="Changes saved successfully!"
-          onClose={() => setShowToast(false)}
-        />
-      )}
     </>
   )
 }
