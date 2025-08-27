@@ -9,16 +9,14 @@ import Toast from '../ui/Toast'
 import './ProductDetailsPage.css'
 
 export default function ProductDetailsPage() {
-  const { id } = useParams()
+  const { id } = useParams<{ id: string }>()
   const [sp] = useSearchParams()
   const isEdit = sp.get('edit') === '1'
 
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
-
   const { items, status, error } = useSelector((s: RootState) => s.products)
   const product = items.find(p => String(p.id) === String(id))
-
   const [showToast, setShowToast] = useState(false)
 
   useEffect(() => {
@@ -31,7 +29,7 @@ export default function ProductDetailsPage() {
     return (
       <div className="product-loading">
         <p>Loading…</p>
-        <Link to="/products" className="link-btn">← Back to list</Link>
+        <Link to="/products" className="link-btn">Back to products</Link>
       </div>
     )
   }
@@ -40,7 +38,7 @@ export default function ProductDetailsPage() {
     return (
       <div className="product-error">
         <p>Failed to load products{error ? `: ${error}` : ''}.</p>
-        <Link to="/products" className="link-btn">← Back to list</Link>
+        <Link to="/products" className="link-btn">Back to products</Link>
       </div>
     )
   }
@@ -50,7 +48,7 @@ export default function ProductDetailsPage() {
       <>
         <div className="product-not-found">
           <p>Product not found.</p>
-          <Link to="/products" className="link-btn">← Back to list</Link>
+          <Link to="/products" className="link-btn">Back to products</Link>
         </div>
         {showToast && (
           <Toast message="Changes saved!" onClose={() => setShowToast(false)} />
@@ -75,20 +73,20 @@ export default function ProductDetailsPage() {
 
     return (
       <>
-        <section className="edit-section">
-          <h1>Edit product</h1>
-          <ProductForm
-            defaultValues={defaults}
-            onSubmit={onSubmit}
-            submitLabel="Save changes"
-          />
-          <Link to={`/products/${product.id}`} className="link-btn cancel-btn">
-            Cancel
-          </Link>
-        </section>
-
+        <ProductForm
+          title="Edit product"
+          defaultValues={defaults}
+          onSubmit={onSubmit}
+          submitLabel="Save changes"
+        />
+        <div className="form__footer">
+          <Link to="/products" className="link-btn">Back to products</Link>
+        </div>
         {showToast && (
-          <Toast message="Changes saved successfully!" onClose={() => setShowToast(false)} />
+          <Toast
+            message="Changes saved successfully!"
+            onClose={() => setShowToast(false)}
+          />
         )}
       </>
     )
@@ -98,25 +96,31 @@ export default function ProductDetailsPage() {
     <>
       <section className="product">
         <div className="product__media">
-          <img className="product__img" src={product.image} alt={product.title} />
+          <img
+            className="product__img"
+            src={product.image}
+            alt={product.title}
+            loading="lazy"
+            decoding="async"
+            width={600}
+            height={600}
+          />
         </div>
-
         <div className="product__content">
           <h1 className="product__title">{product.title}</h1>
           <strong className="product__price">${product.price.toFixed(2)}</strong>
           <p className="product__desc">{product.description}</p>
-
-        <div className="product__actions">
+          <div className="product__actions">
             <Link to="/products" className="link-btn">← Back to list</Link>
-            <Link to={`/products/${product.id}?edit=1`} className="link-btn">
-              Edit
-            </Link>
+            <Link to={`/products/${product.id}?edit=1`} className="link-btn">Edit</Link>
           </div>
         </div>
       </section>
-
       {showToast && (
-        <Toast message="Changes saved successfully!" onClose={() => setShowToast(false)} />
+        <Toast
+          message="Changes saved successfully!"
+          onClose={() => setShowToast(false)}
+        />
       )}
     </>
   )
