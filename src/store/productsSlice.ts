@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { api } from '../api'
+import { getProducts } from '../api'
 import type { Product, ProductFilter } from '../types'
 
 type ProductsState = {
@@ -22,29 +22,12 @@ const initialState: ProductsState = {
   pageSize: 12,
 }
 
-type ProductsApiItem = {
-  id: number
-  title: string
-  description: string
-  thumbnail: string
-  price: number
-}
-type ProductsApiResponse = { products: ProductsApiItem[] }
-
 export const fetchProducts = createAsyncThunk(
   'products/fetch',
   async (_, { rejectWithValue }) => {
     try {
-      const { data } = await api.get<ProductsApiResponse>('/products?limit=100')
-      const normalized: Product[] = data.products.map((p: ProductsApiItem) => ({
-        id: p.id,
-        title: p.title,
-        description: p.description,
-        image: p.thumbnail,
-        price: p.price,
-        liked: false,
-      }))
-      return normalized
+      const products = await getProducts()
+      return products
     } catch (e: unknown) {
       const errorMessage = e instanceof Error ? e.message : 'Failed to load'
       return rejectWithValue(errorMessage)
