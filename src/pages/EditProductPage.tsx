@@ -40,15 +40,10 @@ export default function EditProductPage() {
 
   if (!product) {
     return (
-      <>
-        <div className="product-not-found">
-          <p>Product not found.</p>
-          <Link to="/products" className="link-btn">Back to products</Link>
-        </div>
-        {showToast && (
-          <Toast message="Changes saved!" onClose={() => setShowToast(false)} />
-        )}
-      </>
+      <div className="product-not-found">
+        <p>Product not found.</p>
+        <Link to="/products" className="link-btn">Back to products</Link>
+      </div>
     )
   }
 

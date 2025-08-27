@@ -1,4 +1,6 @@
-:root { color-scheme: light; font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif; 
+:root {
+  color-scheme: light;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   --color-primary: #111;
   --color-on-primary: #fff;
   --color-text: #111;
@@ -9,10 +11,22 @@
   --color-tab-text: #111;
   --color-border: #eee;
 }
-body { margin: 0; background: #fafafa; color: #111; }
+
+body {
+  margin: 0;
+  background: #fafafa;
+  color: #111;
+}
 
 
-.toolbar { display: flex; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; }
+.toolbar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
 
 .grid {
   display: grid;
