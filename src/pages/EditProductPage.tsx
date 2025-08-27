@@ -62,7 +62,6 @@ export default function EditProductPage() {
   const onSubmit = (data: ProductFormValues) => {
     dispatch(updateProduct({ ...product, ...data }))
     setShowToast(true)
-    navigate(`/products/${product.id}`, { replace: true })
   }
 
   return (
@@ -79,7 +78,7 @@ export default function EditProductPage() {
       {showToast && (
         <Toast
           message="Changes saved successfully!"
-          onClose={() => setShowToast(false)}
+          onClose={() => { setShowToast(false); navigate(`/products/${product.id}`, { replace: true }) }}
         />
       )}
     </>

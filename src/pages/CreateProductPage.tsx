@@ -1,12 +1,15 @@
+import { useState } from 'react'
 import { useAppDispatch } from '../store/hooks'
 import { useNavigate } from 'react-router-dom'
 import { createProduct } from '../store/productsSlice'
 import ProductForm from '../ui/ProductForm'
 import type { ProductFormValues } from '../validation/productSchema'
+import Toast from '../ui/Toast'
 
 export default function CreateProductPage() {
   const dispatch = useAppDispatch()
   const nav = useNavigate()
+  const [showToast, setShowToast] = useState(false)
 
   const defaults: ProductFormValues = {
     title: '',
@@ -17,7 +20,7 @@ export default function CreateProductPage() {
 
   const onSubmit = (data: ProductFormValues) => {
     dispatch(createProduct(data))
-    nav('/products')
+    setShowToast(true)
   }
 
   return (
@@ -28,6 +31,12 @@ export default function CreateProductPage() {
           Back to products
         </button>
       </div>
+      {showToast && (
+        <Toast
+          message="Product created successfully!"
+          onClose={() => { setShowToast(false); nav('/products', { replace: true }) }}
+        />
+      )}
     </>
   )
 }

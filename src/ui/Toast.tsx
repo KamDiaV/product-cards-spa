@@ -4,7 +4,7 @@ import './Toast.css'
 export default function Toast({
   message,
   onClose,
-  duration = 3000,
+  duration = 1000,
 }: {
   message: string
   onClose: () => void
