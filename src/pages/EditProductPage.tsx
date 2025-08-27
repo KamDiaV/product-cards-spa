@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { fetchProducts, updateProduct } from '../store/productsSlice'
+import { fetchProductById, updateProduct } from '../store/productsSlice'
 import type { ProductFormValues } from '../validation/productSchema'
 import ProductForm from '../ui/ProductForm'
 import Toast from '../ui/Toast'
@@ -13,14 +13,23 @@ export default function EditProductPage() {
   const { items, status, error } = useAppSelector(s => s.products)
   const product = items.find(p => String(p.id) === String(id))
   const [showToast, setShowToast] = useState(false)
+  const requestedIdRef = useRef<number | null>(null)
+  const numericId = id ? Number(id) : NaN
 
   useEffect(() => {
-    if (status === 'idle') {
-      dispatch(fetchProducts())
+    if (!Number.isNaN(numericId) && !product && requestedIdRef.current !== numericId) {
+      requestedIdRef.current = numericId
+      dispatch(fetchProductById(numericId))
     }
-  }, [status, dispatch])
+    if (product && requestedIdRef.current === numericId) {
+      requestedIdRef.current = null
+    }
+  }, [numericId, product, dispatch])
 
-  if (status === 'idle' || status === 'loading') {
+  if (
+    (!product && (status === 'idle' || status === 'loading')) ||
+    (!product && !Number.isNaN(numericId) && requestedIdRef.current === numericId)
+  ) {
     return (
       <div className="product-loading">
         <p>Loading…</p>
