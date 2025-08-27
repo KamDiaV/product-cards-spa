@@ -8,4 +8,4 @@ export type Product = {
   createdByUser?: boolean 
 }
 
-export type ProductFilter = 'all' | 'favorites'
+export type ProductFilter = 'all' | 'favorites' | 'created'

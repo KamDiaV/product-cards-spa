@@ -33,7 +33,9 @@ export const selectFilteredProducts = createSelector(
   [selectAllProducts, selectFilter, selectSearch],
   (items, filter, search): Product[] => {
     const trimmedQuery = search.trim().toLowerCase()
-    const base = filter === 'favorites' ? items.filter(p => p.liked) : items
+    let base = items
+    if (filter === 'favorites') base = items.filter(p => p.liked)
+    if (filter === 'created') base = items.filter(p => p.createdByUser)
     if (!trimmedQuery) return base
     return base.filter(p =>
       (p.title + ' ' + p.description).toLowerCase().includes(trimmedQuery),

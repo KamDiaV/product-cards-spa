@@ -46,6 +46,7 @@ export default function ProductsPage() {
           options={[
             { value: 'all', label: 'All' },
             { value: 'favorites', label: 'Favorites' },
+            { value: 'created', label: 'Created' },
           ]}
         />
         <SearchInput
