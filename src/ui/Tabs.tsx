@@ -1,7 +1,7 @@
-type Opt = { value: string; label: string }
-export default function Tabs({
+type Opt<T extends string> = { value: T; label: string }
+export default function Tabs<T extends string>({
   value, options, onChange,
-}: { value: string; options: Opt[]; onChange: (v: string) => void }) {
+}: { value: T; options: Opt<T>[]; onChange: (v: T) => void }) {
   return (
     <div style={{ display: 'inline-flex', border: '1px solid #eee', borderRadius: 10, overflow: 'hidden' }}>
       {options.map(o => (
