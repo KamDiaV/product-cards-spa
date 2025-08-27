@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { fetchProducts } from '../store/productsSlice'
+import { fetchProducts, updateProduct } from '../store/productsSlice'
+import type { ProductFormValues } from '../validation/productSchema'
+import ProductForm from '../ui/ProductForm'
 import Toast from '../ui/Toast'
-import './ProductDetailsPage.css'
 
-export default function ProductDetailsPage() {
+export default function EditProductPage() {
   const { id } = useParams<{ id: string }>()
-
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const { items, status, error } = useAppSelector(s => s.products)
   const product = items.find(p => String(p.id) === String(id))
   const [showToast, setShowToast] = useState(false)
@@ -51,31 +52,30 @@ export default function ProductDetailsPage() {
     )
   }
 
+  const defaults: ProductFormValues = {
+    title: product.title,
+    description: product.description,
+    image: product.image,
+    price: product.price,
+  }
+
+  const onSubmit = (data: ProductFormValues) => {
+    dispatch(updateProduct({ ...product, ...data }))
+    setShowToast(true)
+    navigate(`/products/${product.id}`, { replace: true })
+  }
 
   return (
     <>
-      <section className="product">
-        <div className="product__media">
-          <img
-            className="product__img"
-            src={product.image}
-            alt={product.title}
-            loading="lazy"
-            decoding="async"
-            width={600}
-            height={600}
-          />
-        </div>
-        <div className="product__content">
-          <h1 className="product__title">{product.title}</h1>
-          <strong className="product__price">${product.price.toFixed(2)}</strong>
-          <p className="product__desc">{product.description}</p>
-          <div className="product__actions">
-            <Link to="/products" className="link-btn">← Back to list</Link>
-            <Link to={`/products/${product.id}/edit`} className="link-btn">Edit</Link>
-          </div>
-        </div>
-      </section>
+      <ProductForm
+        title="Edit product"
+        defaultValues={defaults}
+        onSubmit={onSubmit}
+        submitLabel="Save changes"
+      />
+      <div className="form__footer">
+        <Link to={`/products/${product.id}`} className="link-btn">Cancel</Link>
+      </div>
       {showToast && (
         <Toast
           message="Changes saved successfully!"

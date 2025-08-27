@@ -38,7 +38,7 @@ export default function ProductCard({ product }: { product: Product }) {
 
   const edit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
-    nav(`/products/${product.id}?edit=1`)
+    nav(`/products/${product.id}/edit`)
   }
 
   return (

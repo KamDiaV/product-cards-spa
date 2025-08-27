@@ -8,7 +8,7 @@ export default function Header() {
         <Link to="/products" className="nav__link">
           Products
         </Link>
-        <Link to="/create" className="nav__link">
+        <Link to="/create-product" className="nav__link">
           Create
         </Link>
       </nav>
