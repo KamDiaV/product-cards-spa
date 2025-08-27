@@ -18,8 +18,6 @@ const ProductsApiResponseSchema = z.object({
   products: z.array(ProductApiItemSchema),
 })
 
-const SingleProductResponseSchema = ProductApiItemSchema
-
 function mapApiItemToProduct(item: z.infer<typeof ProductApiItemSchema>): Product {
   return {
     id: item.id,
@@ -39,6 +37,6 @@ export async function getProducts(): Promise<Product[]> {
 
 export async function getProductById(id: number): Promise<Product> {
   const { data } = await api.get(`/products/${id}`)
-  const parsed = SingleProductResponseSchema.parse(data)
+  const parsed = ProductApiItemSchema.parse(data)
   return mapApiItemToProduct(parsed)
 }
